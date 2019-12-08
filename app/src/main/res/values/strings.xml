@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name" translatable="false">MadeSubmission2</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Show</string>
+    <string name="change_language">Change Language</string>
+    <string name="release_date">Release Date</string>
+    <string name="overview">Overview</string>
+    <string name="more_info">More Info</string>
+    <string name="favorite">Favorite</string>
+    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="cancel_favorite">Remove from Favorite</string>
+    <string name="add_favorite">Yes! Add to favorite!</string>
+
+
+</resources>
