@@ -3,7 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.laylamac.madesubmission2">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <permission
+        android:name="com.laylamac.madesubmission2.READ_DATABASE"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.laylamac.madesubmission2.WRITE_DATABASE"
+        android:protectionLevel="normal" />
 
     <application
         android:allowBackup="true"
@@ -13,16 +24,60 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".view.detail.DetailActivity">
-        </activity>
-        <activity android:name=".view.main.MainActivity">
 
+        <receiver android:name=".view.favorite.FavoriteWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/favorite_widget_info"/>
+
+        </receiver>
+        <activity android:name=".view.search.SearchActivity" />
+        <activity android:name=".view.release.ReleaseActivity" />
+        <activity android:name=".view.setting.SettingsActivity" />
+        <activity android:name=".view.detail.DetailActivity" />
+        <activity android:name=".view.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".utils.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher"/>
+
+        <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/colorAccent"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <service android:name=".firebase.FirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESAGGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".utils.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <provider
+            android:name=".view.movie.MovieProvider"
+            android:authorities="com.laylamac.madesubmission2"
+            android:exported="true"
+            android:readPermission="com.laylamac.madesubmission2.READ_DATABASE"
+            android:writePermission="com.laylamac.madesubmission2.WRITE_DATABSE" />
     </application>
 
 </manifest>

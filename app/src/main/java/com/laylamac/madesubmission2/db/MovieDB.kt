@@ -2,6 +2,7 @@ package com.laylamac.madesubmission2.db
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.laylamac.madesubmission2.db.DatabaseContract.MovieColumns.Companion.DESCRIPTION
@@ -21,9 +22,9 @@ class MovieDB(context: Context) {
         @Volatile
         private var INSTANCE: MovieDB? = null
 
-        fun getInstance(context: Context): MovieDB =
+        fun getInstance(context: Context?): MovieDB =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: MovieDB(context)
+                INSTANCE ?: MovieDB(context as Context)
             }
     }
 
@@ -87,6 +88,26 @@ class MovieDB(context: Context) {
 
     fun deleteMovie(id: String): Int {
         return mDatabase.delete(DatabaseContract().TABLE_MOVIE, "$ID = '$id'", null)
+    }
+
+    fun queryByIdProvider (id : String): Cursor{
+        return mDatabase.query(DATABASE_TABLE, null, "$ID = ?", arrayOf(id), null,null, null, null)
+    }
+
+    fun queryProvider(): Cursor{
+        return mDatabase.query(DATABASE_TABLE, null, null, null, null, null, "$ID ASC")
+    }
+
+    fun insertProvider(values : ContentValues): Long {
+        return mDatabase.insert(DATABASE_TABLE, null, values)
+    }
+
+    fun updateProvider(id: String, values : ContentValues): Int{
+        return mDatabase.update(DATABASE_TABLE, values, "$ID = ?", arrayOf(id))
+    }
+
+    fun deleteProvider(id: String) : Int{
+        return mDatabase.delete(DATABASE_TABLE, "$ID = ?", arrayOf(id))
     }
 
 

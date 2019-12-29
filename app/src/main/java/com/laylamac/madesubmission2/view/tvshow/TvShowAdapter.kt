@@ -14,7 +14,7 @@ import com.laylamac.madesubmission2.model.TvShowMdl
 
 class TvShowAdapter(
     private val context: Context,
-    private val listTv: List<TvShowMdl>?,
+    val listTv: MutableList<TvShowMdl>,
     private val mListener: OnItemClicked
 ) : RecyclerView.Adapter<TvShowAdapter.ViewHolder>() {
 
@@ -34,11 +34,11 @@ class TvShowAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listTv!!.size
+        return listTv.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listTv!![position]
+        val item = listTv[position]
         holder.tvTitle.text = item.title
         Glide.with(context)
             .load("https://image.tmdb.org/t/p/w342" + item.poster)

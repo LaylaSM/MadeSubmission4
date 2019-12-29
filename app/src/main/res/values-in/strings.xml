@@ -9,26 +9,34 @@
     <string name="change_language">Ubah bahasa</string>
     <string name="release_date">Tanggal Rilis</string>
     <string name="overview">Gambaran</string>
+    <string name="daily_reminder">Pengingat harian</string>
+    <string name="release_reminder">Pengingat rilis</string>
+
+
     <string name="more_info">Info lebih</string>
     <string name="favorite">Favorit</string>
     <string name="add_favorite" translatable="false">Ya, masuk ke favorit</string>
     <string name="cancel_favorite">Terhapus dari Favorit</string>
     <string name="add_to_favorite" translatable="false">Masukkan ke favorit</string>
+    <string name="empty_movie_notif">Maaf, Film tidak ditemukan</string>
+    <string name="search">Cari</string>
+    <string name="hint_search">Ketik judul film disini ..</string>
+
+    <string name="settings">Pengaturan</string>
+    <string name="empty_content">Data Kosong</string>
+
+    <string name="show_reminder_enabled">%1s pengingat nyala</string>
+    <string name="show_reminder_disabled">%1s pengingat dimatikan</string>
+
+    <string name="daily_notif_message">Waktunya buka Aplikasi Film!</string>
+    <string name="release_notif_message">Cek , rilis yang baru lho!</string>
 
 
-    <!--<array name="data_release_year_movie">
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-        <item>2018</item>
-    </array>-->
+    <string-array name="filter_search">
+        <item>Film</item>
+        <item>Acara TV</item>
+    </string-array>
+
+
 
 </resources>

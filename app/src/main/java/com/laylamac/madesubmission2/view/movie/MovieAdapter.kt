@@ -13,8 +13,8 @@ import com.laylamac.madesubmission2.R
 import com.laylamac.madesubmission2.model.MovieMdl
 
 class MovieAdapter(
-    private val context: Context?,
-    private val listMovie: List<MovieMdl>?,
+    private val context: Context,
+    val listMovie: MutableList<MovieMdl>,
     private val mListener: OnItemClicked
 ) : RecyclerView.Adapter<MovieAdapter.ViewHolder>() {
 
@@ -26,7 +26,7 @@ class MovieAdapter(
     }
 
     override fun getItemCount(): Int {
-        return listMovie!!.size
+        return listMovie.size
     }
 
     class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
@@ -39,9 +39,9 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = listMovie!![position]
+        val item = listMovie[position]
         holder.tvTitle.text = item.title
-        Glide.with(context!!)
+        Glide.with(context)
             .load("https://image.tmdb.org/t/p/w342" + item.poster)
             .into(holder.ivPoster)
         holder.cardView.setOnClickListener {

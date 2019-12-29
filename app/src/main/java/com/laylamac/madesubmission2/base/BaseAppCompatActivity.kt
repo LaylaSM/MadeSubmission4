@@ -11,4 +11,12 @@ open class BaseAppCompatActivity : AppCompatActivity() {
     var KEY_TVSHOW_FRAGMENT = "TvFragment"
     var KEY_FAVORITE_FRAGMENT = "FavoriteFragment"
 
+    var TYPE_MOVIE = "movie"
+    var TYPE_TVSHOW = "tv"
+
+    var EXTRA_TYPE = "type"
+
+    var EXTRA_QUERY = "extra_query"
+
+
 }

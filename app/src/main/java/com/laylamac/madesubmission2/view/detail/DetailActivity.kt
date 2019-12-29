@@ -17,13 +17,17 @@ import com.laylamac.madesubmission2.db.TvShowDB
 import com.laylamac.madesubmission2.model.MovieMdl
 import com.laylamac.madesubmission2.model.TvShowMdl
 import com.loopj.android.http.AsyncHttpClient
-import com.loopj.android.http.AsyncHttpResponseHandler
+import com.loopj.android.http.JsonHttpResponseHandler
 import com.loopj.android.http.RequestParams
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.json.JSONObject
 
 class DetailActivity : AppCompatActivity() {
+
+    val EXTRA_TYPE = "extra_type"
+    val EXTRA_MOVIE_ID = "extra_movie_id"
+    val EXTRA_TV_SHOW_ID = "extra_tv_show_id"
 
     private lateinit var mMovie: MovieMdl
     private lateinit var mMovieDB: MovieDB
@@ -40,7 +44,7 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         pb_detail_activity.visibility = View.VISIBLE
-        type = intent.getStringExtra("extra_type")!!
+        type = intent.getStringExtra(EXTRA_TYPE)!!
 
         mMovieDB = MovieDB.getInstance(applicationContext)
         mMovieDB.open()
@@ -52,33 +56,26 @@ class DetailActivity : AppCompatActivity() {
         params.put("api_key", BuildConfig.TMDB_API_KEY)
         params.put("language", "en-US")
         val client = AsyncHttpClient()
-        val url = "https://api.themoviedb.org/3/discover/$type"
 
         when (type) {
             "movie" -> {
-                val id = intent.getStringExtra("extra_movie_id")
-                client.get(url, params, object : AsyncHttpResponseHandler() {
+                val id = intent.getStringExtra(EXTRA_MOVIE_ID)
+                val url = BuildConfig.URL_DETAIL_MOVIE + "/$id"
+                client.get(url, params, object : JsonHttpResponseHandler() {
                     override fun onSuccess(
                         statusCode: Int,
-                        headers: Array<Header>,
-                        responseBody: ByteArray
+                        headers: Array<Header>?,
+                        response: JSONObject?
                     ) {
                         try {
-                            val result = String(responseBody)
-                            val responseJson = JSONObject(result)
-                            val list = responseJson.getJSONArray("results")
-                            for (i in 0 until list.length()) {
-                                if (list.getJSONObject(i).getString("id") == id) {
-                                    mMovie = MovieMdl(list.getJSONObject(i))
-                                    tv_title_detail.text = mMovie.title
-                                    Glide.with(applicationContext)
-                                        .load("https://image.tmdb.org/t/p/w185" + mMovie.poster)
-                                        .into(iv_poster_detail)
-                                    tv_release_date_detail.text = mMovie.release
-                                    tv_desc_detail.text = mMovie.description
-                                }
+                            mMovie = MovieMdl(response as JSONObject)
+                            tv_title_detail.text = mMovie.title
+                            Glide.with(applicationContext)
+                                .load("https://image.tmdb.org/t/p/w185" + mMovie.poster)
+                                .into(iv_poster_detail)
+                            tv_release_date_detail.text = mMovie.release
+                            tv_desc_detail.text = mMovie.description
 
-                            }
 
                         } catch (e: Exception) {
                             Log.d("error", e.message!!)
@@ -92,39 +89,37 @@ class DetailActivity : AppCompatActivity() {
                     override fun onFailure(
                         statusCode: Int,
                         headers: Array<out Header>?,
-                        responseBody: ByteArray?,
-                        error: Throwable?
+                        throwable: Throwable?,
+                        errorResponse: JSONObject?
                     ) {
-                        Toast.makeText(applicationContext, error!!.message, Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            applicationContext,
+                            errorResponse?.getString("status_message"),
+                            Toast.LENGTH_SHORT
+                        )
                             .show()
                     }
 
                 })
             }
             "tv" -> {
-                val id = intent.getStringExtra("extra_tv_show_id")
-                client.get(url, params, object : AsyncHttpResponseHandler() {
+                val id = intent.getStringExtra(EXTRA_TV_SHOW_ID)
+                val url = BuildConfig.URL_DETAIL_TV_SHOW + "/$id"
+                client.get(url, params, object : JsonHttpResponseHandler() {
                     override fun onSuccess(
                         statusCode: Int,
                         headers: Array<out Header>?,
-                        responseBody: ByteArray
+                        response: JSONObject?
                     ) {
                         try {
-                            val result = String(responseBody)
-                            val responseJson = JSONObject(result)
-                            val json = responseJson.getJSONArray("results")
-                            for (i in 0 until json.length()) {
-                                if (json.getJSONObject(i).getString("id") == id) {
-                                    mTvShow = TvShowMdl(json.getJSONObject(i))
-                                    tv_title_detail.text = mTvShow.title
-                                    Glide.with(applicationContext)
-                                        .load("https://image.tmdb.org/t/p/w185" + mTvShow.poster)
-                                        .into(iv_poster_detail)
-                                    tv_release_date_detail.text = mTvShow.release
-                                    tv_desc_detail.text = mTvShow.description
+                            mTvShow = TvShowMdl(response as JSONObject)
+                            tv_title_detail.text = mTvShow.title
+                            Glide.with(applicationContext)
+                                .load("https://image.tmdb.org/t/p/w185" + mTvShow.poster)
+                                .into(iv_poster_detail)
+                            tv_release_date_detail.text = mTvShow.release
+                            tv_desc_detail.text = mTvShow.description
 
-                                }
-                            }
                         } catch (e: Exception) {
                             Log.d("error", e.message!!)
                         }
@@ -137,17 +132,17 @@ class DetailActivity : AppCompatActivity() {
                     override fun onFailure(
                         statusCode: Int,
                         headers: Array<out Header>?,
-                        responseBody: ByteArray?,
-                        error: Throwable?
+                        throwable: Throwable?,
+                        error: JSONObject?
                     ) {
-                        Toast.makeText(applicationContext, error!!.message, Toast.LENGTH_SHORT)
+                        Toast.makeText(applicationContext, error?.getString("status_message"), Toast.LENGTH_SHORT)
                             .show()
                     }
 
                 })
             }
             "movie_favorite" -> {
-                mMovie = intent.getParcelableExtra("fav_movie")
+                mMovie = intent.getParcelableExtra("fav_movie")!!
                 tv_title_detail.text = mMovie.title
                 Glide.with(applicationContext)
                     .load("https://image.tmdb.org/t/p/w185" + mMovie.poster)
@@ -173,8 +168,6 @@ class DetailActivity : AppCompatActivity() {
                 pb_detail_activity.visibility = View.GONE
                 isFavorite = isFavorites()
                 invalidateOptionsMenu()
-
-
             }
         }
 
@@ -199,7 +192,11 @@ class DetailActivity : AppCompatActivity() {
                     if (type == "movie" || type == "movie_favorite") {
                         val result = mMovieDB.deleteMovie(mMovie.id)
                         if (result > 0) {
-                            Toast.makeText(applicationContext, getString(R.string.cancel_favorite), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.cancel_favorite),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             isFavorite = isFavorites()
                         }
@@ -207,7 +204,11 @@ class DetailActivity : AppCompatActivity() {
                     } else if (type == "tv" || type == "tv_show_favorite") {
                         val result = mTvShowDB.deleteTvShow(mTvShow.id!!)
                         if (result > 0) {
-                            Toast.makeText(applicationContext, getString(R.string.cancel_favorite), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.cancel_favorite),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             isFavorite = isFavorites()
                         }
@@ -218,14 +219,22 @@ class DetailActivity : AppCompatActivity() {
                     if (type == "movie" || type == "movie_favorite") {
                         val result = mMovieDB.insertMovie(mMovie)
                         if (result > 0) {
-                            Toast.makeText(applicationContext, getString(R.string.add_favorite), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.add_favorite),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             isFavorite = isFavorites()
                         }
                     } else if (type == "tv" || type == "tv_show_favorite") {
                         val result = mTvShowDB.insertTvShow(mTvShow)
                         if (result > 0) {
-                            Toast.makeText(applicationContext, getString(R.string.add_favorite), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                applicationContext,
+                                getString(R.string.add_favorite),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
                             isFavorite = isFavorites()
 

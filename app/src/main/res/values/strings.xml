@@ -11,9 +11,32 @@
     <string name="overview">Overview</string>
     <string name="more_info">More Info</string>
     <string name="favorite">Favorite</string>
+    <string name="daily_reminder">Daily reminder</string>
+    <string name="release_reminder">Release reminder</string>
     <string name="add_to_favorite">Add to Favorite</string>
     <string name="cancel_favorite">Remove from Favorite</string>
     <string name="add_favorite">Yes! Add to favorite!</string>
+    <string name="empty_movie_notif">Sorry, Movie not found</string>
+    <string name="search">Search</string>
+    <string name="hint_search">Type title movie here ..</string>
 
+    <string name="settings">Settings</string>
+    <string name="empty_content">Data EMPTY</string>
+
+    <string name="daily_notif_message">It\'s time to open Movie App!</string>
+    <string name="release_notif_message">Check this out, it\'s new release</string>
+
+
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="default_notification_channel_name" translatable="false">MovieReminder</string>
+
+    <string name="show_reminder_enabled">%1s reminder enabled</string>
+    <string name="show_reminder_disabled">%1s reminder disabled</string>
+
+
+    <string-array name="filter_search">
+        <item>Movie</item>
+        <item>TV Show</item>
+    </string-array>
 
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Reminder"
+        android:textColor="@color/colorPrimaryDark">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="daily_reminder"
+            app:title="@string/daily_reminder" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="release_reminder"
+            android:title="@string/release_reminder" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Language">
+
+        <Preference
+            android:key="preference_language"
+            android:title="@string/change_language" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
